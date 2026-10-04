@@ -1,0 +1,21 @@
+import 'dotenv/config';
+import express from 'express'; import http from 'http'; import cors from 'cors'; import helmet from 'helmet';
+import rateLimit from 'express-rate-limit'; import mongoSanitize from 'express-mongo-sanitize'; import { Server } from 'socket.io';
+import connectDB from './config/db.js'; import { initSocket } from './services/socket.js'; import { errorHandler } from './middleware/error.js';
+import { setIO } from './services/io.js';
+import auth from './routes/auth.js'; import exams from './routes/exams.js'; import questions from './routes/questions.js';
+import attempts from './routes/attempts.js'; import answers from './routes/answers.js'; import antiCheat from './routes/antiCheat.js'; import admin from './routes/admin.js';
+const app = express(); const server = http.createServer(app);
+const origins = (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(s => s.trim());
+app.set('trust proxy', 1);
+app.use(helmet()); app.use(cors({ origin: origins, credentials: true })); app.use(express.json({ limit: '100kb' })); app.use(mongoSanitize());
+app.use('/api', rateLimit({ windowMs: 60_000, max: 600 }));
+app.use('/api/auth', rateLimit({ windowMs: 15 * 60_000, max: 50 }));
+app.get('/health', (_, res) => res.json({ ok: true }));
+app.use('/api/auth', auth); app.use('/api/exams', exams); app.use('/api/questions', questions); app.use('/api/attempts', attempts);
+app.use('/api/answers', answers); app.use('/api/anti-cheat', antiCheat); app.use('/api/admin', admin);
+app.use((req, res) => res.status(404).json({ message: 'Not found' }));
+app.use(errorHandler);
+const io = new Server(server, { cors: { origin: origins } }); setIO(io); initSocket(io);
+connectDB().then(() => server.listen(process.env.PORT || 5000, () => console.log('API on port ' + (process.env.PORT || 5000))))
+  .catch(e => { console.error('Startup failed:', e.message); process.exit(1); });

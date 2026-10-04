@@ -1,0 +1,13 @@
+import { Loader2 } from 'lucide-react';
+export const btn = 'inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 transition';
+export const btn2 = 'inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-300 bg-white text-sm font-medium hover:bg-slate-100 disabled:opacity-50 transition';
+export const inp = 'w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500';
+export const Card = ({ children, className = '' }) => <div className={`bg-white rounded-xl border border-slate-200 shadow-sm p-5 ${className}`}>{children}</div>;
+export const LoadingSpinner = () => <div className="flex justify-center py-16"><Loader2 className="animate-spin text-indigo-600" size={32} /></div>;
+export const Empty = ({ text }) => <div className="text-center text-slate-500 py-10 text-sm">{text}</div>;
+export const ErrorBox = ({ text }) => <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg p-3 text-sm">{text}</div>;
+export const Stat = ({ label, value, icon: I }) => <Card><div className="flex items-center justify-between"><div><p className="text-xs uppercase text-slate-500">{label}</p><p className="text-2xl font-bold mt-1">{value}</p></div>{I && <I className="text-indigo-500" />}</div></Card>;
+export const RiskBadge = ({ level }) => { const c = level === 'Normal Activity' ? 'bg-emerald-100 text-emerald-700' : level === 'Review Recommended' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'; return <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${c}`}>{level}</span>; };
+export const ProgressBar = ({ value }) => <div className="h-2 bg-slate-200 rounded-full overflow-hidden"><div className="h-full bg-indigo-600 transition-all" style={{ width: `${Math.min(100, value)}%` }} /></div>;
+export const Table = ({ head, children }) => <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-left text-slate-500 border-b">{head.map(h => <th key={h} className="py-2 pr-4 font-medium">{h}</th>)}</tr></thead><tbody className="divide-y">{children}</tbody></table></div>;
+export const riskOf = s => (s < 3 ? 'Normal Activity' : s < 8 ? 'Review Recommended' : 'Multiple Incidents');
