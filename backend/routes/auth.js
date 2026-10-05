@@ -2,7 +2,7 @@ import { Router } from 'express'; import bcrypt from 'bcryptjs'; import jwt from
 import { User } from '../models/index.js'; import { protect } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
 const router = Router(); const s = v => typeof v === 'string';
 const sign = u => jwt.sign({ id: u._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-const pub = u => ({ id: u._id, name: u.name, email: u.email, role: u.role });
+const pub = u => ({ id: u._id, name: u.name, email: u.email, role: u.role, profilePicture: u.profilePicture || '' });
 router.post('/register', h(async (req, res) => {
   const { name, email, password } = req.body;
   if (!s(name) || !s(email) || !s(password) || !name.trim() || !/^\S+@\S+\.\S+$/.test(email) || password.length < 6)
@@ -19,4 +19,19 @@ router.post('/login', h(async (req, res) => {
   res.json({ token: sign(user), user: pub(user) });
 }));
 router.get('/me', protect, (req, res) => res.json({ user: pub(req.user) }));
+router.put('/profile', protect, h(async (req, res) => {
+  const { name, email, profilePicture } = req.body;
+  if (!s(name) || !name.trim() || !s(email) || !/^\S+@\S+\.\S+$/.test(email))
+    return res.status(400).json({ message: 'Valid name and email required' });
+  if (profilePicture !== undefined && (!s(profilePicture) || profilePicture.length > 100000))
+    return res.status(400).json({ message: 'Profile picture must be smaller than 75 KB' });
+  const normalizedEmail = email.trim().toLowerCase();
+  const existing = await User.findOne({ email: normalizedEmail, _id: { $ne: req.user._id } });
+  if (existing) return res.status(409).json({ message: 'Email already registered' });
+  req.user.name = name.trim();
+  req.user.email = normalizedEmail;
+  if (profilePicture !== undefined) req.user.profilePicture = profilePicture;
+  await req.user.save();
+  res.json({ user: pub(req.user) });
+}));
 export default router;

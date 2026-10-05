@@ -2,6 +2,7 @@ import mongoose from 'mongoose'; import { EVENT_TYPES } from '../utils/weights.j
 const { Schema, model } = mongoose; const ref = (r, x = {}) => ({ type: Schema.Types.ObjectId, ref: r, required: true, ...x });
 export const User = model('User', new Schema({
   name: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  profilePicture: { type: String, default: '' },
   password: { type: String, required: true, select: false }, role: { type: String, enum: ['student', 'admin'], default: 'student' }, createdAt: { type: Date, default: Date.now } }));
 export const Exam = model('Exam', new Schema({
   title: { type: String, required: true, trim: true }, description: String, duration: { type: Number, required: true, min: 1 },

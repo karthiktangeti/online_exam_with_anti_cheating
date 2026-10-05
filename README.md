@@ -30,7 +30,7 @@ React + Vite + Tailwind | Node + Express + MongoDB + Socket.IO
 6. Timer test: create a 1-minute exam; let it expire → auto-submit. Tampering with the client timer doesn't help: the server rejects answers after `endTime`.
 
 ## 3. Deploy
-Backend → Render (root `backend`, start `npm start`, env: MONGO_URI, JWT_SECRET, CLIENT_URL=<vercel url>). Frontend → Vercel (root `frontend`, env `VITE_API_URL=<render url>`). Atlas: allow Render's IPs (0.0.0.0/0 for testing).
+Backend → Render (root `backend`, start `npm start`, env: MONGO_URI, JWT_SECRET, CLIENT_URL=<vercel url>). Frontend → Vercel (root `frontend`, env `VITE_API_URL=<render url>`). The frontend includes a Vercel SPA rewrite so refreshing routes such as `/student/exams` serves the React app instead of returning 404. Atlas: allow Render's IPs (0.0.0.0/0 for testing).
 
 ## 4. Design notes
 - Backend is the source of truth: scoring, deadlines, `correctAnswer` never leaves the server before submission.

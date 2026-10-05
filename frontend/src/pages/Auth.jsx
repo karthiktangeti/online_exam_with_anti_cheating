@@ -10,23 +10,23 @@ export default function Auth({ mode }) {
     catch (x) { setErr(errMsg(x)); } finally { setBusy(false); }
   };
   const set = k => e => setF({ ...f, [k]: e.target.value });
-  return <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-slate-950 bg-cover bg-center" style={{ backgroundImage: "url('https://media.istockphoto.com/id/2207141986/photo/ai-governance-and-responsive-generative-artificial-intelligence-use-compliance-strategy-and.jpg?s=1024x1024&w=is&k=20&c=UISb5BbdEBxkIM--eF56scOkkctrFr0alBIs6MKMXug=')" }}>
-    <div className="absolute inset-0 bg-slate-950/65" />
-    <div className="relative grid w-full max-w-5xl overflow-hidden rounded-3xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-sm lg:grid-cols-2">
-      <section className="hidden min-h-[580px] flex-col justify-between p-10 text-white lg:flex">
-        <div className="flex items-center gap-3"><div className="rounded-xl bg-cyan-400/20 p-2 ring-1 ring-cyan-200/40"><GraduationCap size={28} /></div><span className="text-xl font-bold tracking-tight">ExamGuard</span></div>
-        <div><p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-cyan-200">Intelligent examination</p><h1 className="max-w-md text-5xl font-bold leading-tight">Secure exams with confidence.</h1><p className="mt-5 max-w-md text-sm leading-6 text-slate-200">A modern exam platform with transparent monitoring, reliable assessments, and review-friendly anti-cheat signals.</p></div>
-        <div className="flex items-center gap-2 text-sm text-slate-200"><ShieldCheck size={18} className="text-cyan-300" /> Privacy-first monitoring. No continuous video recording.</div>
+  return <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4 sm:p-8">
+    <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60 lg:grid-cols-[1.05fr_.95fr]">
+      <section className="relative hidden min-h-[600px] overflow-hidden bg-[#123b2a] p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-600/20 blur-2xl" /><div className="absolute -bottom-32 -left-24 h-80 w-80 rounded-full bg-indigo-500/10 blur-2xl" />
+        <div className="relative flex items-center gap-3"><div className="rounded-xl bg-blue-600 p-2"><GraduationCap size={25} /></div><span className="text-xl font-bold tracking-tight">ExamPro</span></div>
+        <div className="relative"><p className="mb-3 text-sm font-semibold uppercase tracking-[0.24em] text-blue-300">Online examination platform</p><h1 className="max-w-md text-5xl font-bold leading-tight">Prepare smarter. Perform better.</h1><p className="mt-5 max-w-md text-sm leading-6 text-slate-300">Take secure assessments, track your progress, and build confidence with a workspace designed for focused learning.</p><div className="mt-8 grid max-w-sm grid-cols-2 gap-3"><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-2xl font-bold">24/7</p><p className="mt-1 text-xs text-slate-400">Accessible learning</p></div><div className="rounded-2xl border border-white/10 bg-white/5 p-4"><p className="text-2xl font-bold">100%</p><p className="mt-1 text-xs text-slate-400">Focused experience</p></div></div></div>
+        <div className="relative flex items-center gap-2 text-sm text-slate-300"><ShieldCheck size={18} className="text-blue-300" /> Privacy-first monitoring. No continuous video recording.</div>
       </section>
-      <section className="bg-white/95 p-6 sm:p-10">
-        <div className="mb-8 lg:hidden"><div className="flex items-center gap-2 text-indigo-700"><GraduationCap size={28} /><span className="text-xl font-bold">ExamGuard</span></div></div>
-        <div className="mb-7"><p className="text-sm font-semibold uppercase tracking-widest text-indigo-600">{reg ? 'Get started' : 'Welcome back'}</p><h2 className="mt-2 text-3xl font-bold text-slate-900">{reg ? 'Create your account' : 'Sign in to your account'}</h2><p className="mt-2 text-sm text-slate-500">{reg ? 'Join your secure online examination workspace.' : 'Continue to your examination workspace.'}</p></div>
+      <section className="p-6 sm:p-12">
+        <div className="mb-10 lg:hidden"><div className="flex items-center gap-2 text-blue-600"><GraduationCap size={28} /><span className="text-xl font-bold text-slate-900">ExamPro</span></div></div>
+        <div className="mb-8"><p className="text-sm font-semibold uppercase tracking-widest text-blue-600">{reg ? 'Get started' : 'Welcome back'}</p><h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900">{reg ? 'Create your account' : 'Sign in to your account'}</h2><p className="mt-2 text-sm text-slate-500">{reg ? 'Join your secure online examination workspace.' : 'Continue to your examination workspace.'}</p></div>
         <form onSubmit={submit} className="space-y-4">{err && <ErrorBox text={err} />}
           {reg && <label className="block text-sm font-medium text-slate-700">Full name<input className={inp + ' mt-1.5 bg-white'} placeholder="Enter your full name" value={f.name} onChange={set('name')} required /></label>}
           <label className="block text-sm font-medium text-slate-700">Email<input className={inp + ' mt-1.5 bg-white'} type="email" placeholder="you@example.com" value={f.email} onChange={set('email')} required /></label>
           <label className="block text-sm font-medium text-slate-700">Password<input className={inp + ' mt-1.5 bg-white'} type="password" placeholder="Minimum 6 characters" value={f.password} onChange={set('password')} required minLength={6} /></label>
-          <button className={btn + ' mt-2 w-full bg-indigo-600 py-3 shadow-lg shadow-indigo-200 hover:bg-indigo-700'} disabled={busy}>{busy ? 'Please wait…' : reg ? 'Create account' : 'Sign in'}</button></form>
-        <p className="mt-6 text-center text-sm text-slate-500">{reg ? <>Have an account? <Link className="font-semibold text-indigo-600 hover:text-indigo-800" to="/login">Sign in</Link></> : <>New student? <Link className="font-semibold text-indigo-600 hover:text-indigo-800" to="/register">Create an account</Link></>}</p>
+          <button className={btn + ' mt-2 w-full py-3 shadow-lg shadow-blue-200'} disabled={busy}>{busy ? 'Please wait…' : reg ? 'Create account' : 'Sign in'}</button></form>
+        <p className="mt-6 text-center text-sm text-slate-500">{reg ? <>Have an account? <Link className="font-semibold text-blue-600 hover:text-blue-800" to="/login">Sign in</Link></> : <>New student? <Link className="font-semibold text-blue-600 hover:text-blue-800" to="/register">Create an account</Link></>}</p>
       </section>
     </div>
   </div>;

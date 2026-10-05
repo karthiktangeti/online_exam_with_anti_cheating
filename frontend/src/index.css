@@ -1,1 +1,63 @@
-@tailwind base; @tailwind components; @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: #f8fafc; }
+  body { margin: 0; min-width: 320px; background: #f8fafc; }
+  button, input { font: inherit; }
+}
+
+@layer components {
+  .app-shell { min-height: 100vh; background: #f8fafc; }
+  .page-enter { animation: page-enter .35s ease-out both; }
+  .surface { border: 1px solid #e2e8f0; border-radius: 1rem; background: #fff; box-shadow: 0 8px 30px rgb(15 23 42 / 5%); }
+  .soft-grid { background-image: linear-gradient(to right, rgb(226 232 240 / 35%) 1px, transparent 1px), linear-gradient(to bottom, rgb(226 232 240 / 35%) 1px, transparent 1px); background-size: 32px 32px; }
+  .admin-main h1 { color: #0f172a !important; text-shadow: none; }
+  .admin-main > div > p, .admin-main > div > div > p { color: #64748b; }
+}
+
+/* Green is the shared product accent across student and admin surfaces. */
+@layer utilities {
+  .bg-blue-600 { background-color: #16804b !important; }
+  .bg-blue-700 { background-color: #12663c !important; }
+  .bg-blue-50 { background-color: #ecfdf3 !important; }
+  .bg-blue-100 { background-color: #d9f7e5 !important; }
+  .text-blue-600 { color: #16804b !important; }
+  .text-blue-700 { color: #12663c !important; }
+  .text-blue-800 { color: #0d5130 !important; }
+  .text-blue-200 { color: #bbf7d0 !important; }
+  .text-blue-300 { color: #86efac !important; }
+  .border-blue-200 { border-color: #bbf7d0 !important; }
+  .border-blue-400 { border-color: #4ade80 !important; }
+  .border-blue-400\/20 { border-color: rgb(74 222 128 / .2) !important; }
+  .bg-blue-500\/10 { background-color: rgb(22 128 75 / .1) !important; }
+  .bg-blue-600\/20 { background-color: rgb(22 128 75 / .2) !important; }
+  .bg-indigo-500\/10 { background-color: rgb(22 128 75 / .1) !important; }
+  .ring-blue-100 { --tw-ring-color: #dcfce7 !important; }
+  .focus\:border-blue-500:focus { border-color: #16804b !important; }
+  .focus\:ring-blue-100:focus { --tw-ring-color: #dcfce7 !important; }
+  .hover\:bg-blue-100:hover { background-color: #d9f7e5 !important; }
+  .hover\:bg-blue-700:hover { background-color: #12663c !important; }
+  .hover\:text-blue-800:hover { color: #0d5130 !important; }
+  .shadow-blue-950\/20 { --tw-shadow-color: rgb(6 78 43 / .2) !important; }
+  .shadow-blue-200 { --tw-shadow-color: rgb(134 239 172 / .35) !important; }
+  .bg-indigo-600 { background-color: #16804b !important; }
+  .bg-indigo-700 { background-color: #12663c !important; }
+  .text-indigo-600 { color: #16804b !important; }
+  .text-indigo-700 { color: #12663c !important; }
+  .text-indigo-800 { color: #0d5130 !important; }
+  .border-indigo-600 { border-color: #16804b !important; }
+  .focus\:ring-indigo-500:focus { --tw-ring-color: #bbf7d0 !important; }
+  .bg-cyan-100 { background-color: #dcfce7 !important; }
+  .text-cyan-300 { color: #86efac !important; }
+  .text-cyan-200 { color: #bbf7d0 !important; }
+  .text-cyan-600 { color: #16804b !important; }
+  .bg-purple-100 { background-color: #dcfce7 !important; }
+  .text-purple-700 { color: #16804b !important; }
+  .text-purple-600 { color: #16804b !important; }
+  .text-purple-100 { color: #d1fae5 !important; }
+}
+
+@keyframes page-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }

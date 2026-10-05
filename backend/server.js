@@ -35,7 +35,7 @@ const server = http.createServer(app);
 
 const origins = [
   "http://localhost:5173",
-  "https://online-exam-sepia-gamma.vercel.app",
+  // "https://online-exam-sepia-gamma.vercel.app",
 ];
 
 const corsOptions = {

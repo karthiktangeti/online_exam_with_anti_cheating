@@ -8,5 +8,6 @@ export function AuthProvider({ children }) {
   }, []);
   const authed = async (path, body) => { const { data } = await api.post(path, body); localStorage.setItem('token', data.token); setUser(data.user); return data.user; };
   const logout = () => { localStorage.removeItem('token'); setUser(null); };
-  return <Ctx.Provider value={{ user, loading, login: b => authed('/auth/login', b), register: b => authed('/auth/register', b), logout }}>{children}</Ctx.Provider>;
+  const updateUser = async body => { const { data } = await api.put('/auth/profile', body); setUser(data.user); return data.user; };
+  return <Ctx.Provider value={{ user, loading, login: b => authed('/auth/login', b), register: b => authed('/auth/register', b), updateUser, logout }}>{children}</Ctx.Provider>;
 }

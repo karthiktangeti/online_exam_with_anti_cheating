@@ -35,9 +35,9 @@ export default function ExamRoom() {
   const toggleMark = qid => { const m = marked.includes(qid) ? marked.filter(x => x !== qid) : [...marked, qid]; setMarked(m); api.put(`/attempts/${attemptId}/marked`, { marked: m }).catch(() => {}); };
   if (err) return <div className="p-6"><ErrorBox text={err} /></div>; if (!d) return <LoadingSpinner />;
   const q = d.questions[i], answered = Object.values(answers).filter(v => v != null).length;
-  return <div className="min-h-screen bg-slate-50 select-none">
+  return <div className="min-h-screen select-none bg-slate-50">
     <AntiCheatMonitor attemptId={attemptId} report={report} active={!done} /><WebcamMonitor report={report} active={!done} />
-    <header className="bg-white border-b px-4 py-3 flex justify-between items-center sticky top-0 z-30"><h1 className="font-semibold truncate">{d.exam.title}</h1><div className="flex items-center gap-4"><div className="text-xs font-semibold text-amber-700">WARNINGS {d.warningCount} / 10</div><Timer endTime={d.endTime} offset={d.offset} onExpire={submit} /></div></header>
+    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3"><div><p className="text-[10px] font-semibold uppercase tracking-widest text-blue-600">Exam in progress</p><h1 className="truncate font-semibold text-slate-900">{d.exam.title}</h1></div><div className="flex items-center gap-3"><div className="hidden text-xs font-semibold text-amber-700 sm:block">WARNINGS {d.warningCount} / 10</div><Timer endTime={d.endTime} offset={d.offset} onExpire={submit} /></div></header>
     <div className="max-w-3xl mx-auto p-4 space-y-4">
       <div><div className="flex justify-between text-xs text-slate-500 mb-1"><span>Question {i + 1} of {d.questions.length}</span><span>{answered} answered</span></div><ProgressBar value={(answered / d.questions.length) * 100} /></div>
       <Card><div className="flex justify-between gap-3"><h2 className="text-lg font-medium">{q.question}</h2><span className="text-xs text-slate-400 whitespace-nowrap">{q.marks} mark{q.marks !== 1 && 's'}</span></div>

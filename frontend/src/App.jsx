@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'; import { useAuth } from './context/AuthContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx'; import Layout from './components/Layout.jsx'; import Auth from './pages/Auth.jsx';
-import StudentDashboard from './pages/StudentDashboard.jsx'; import ExamStart from './pages/ExamStart.jsx'; import ExamRoom from './pages/ExamRoom.jsx'; import Result from './pages/Result.jsx';
+import StudentDashboard from './pages/StudentDashboard.jsx'; import StudentExams from './pages/StudentExams.jsx'; import StudentResults from './pages/StudentResults.jsx'; import StudentProfile from './pages/StudentProfile.jsx'; import ExamStart from './pages/ExamStart.jsx'; import ExamRoom from './pages/ExamRoom.jsx'; import Result from './pages/Result.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx'; import AdminExams from './pages/AdminExams.jsx'; import AdminQuestions from './pages/AdminQuestions.jsx';
 import AdminStudents from './pages/AdminStudents.jsx'; import AdminAttempts from './pages/AdminAttempts.jsx'; import AttemptReport from './pages/AttemptReport.jsx';
 import AdminLive from './pages/AdminLive.jsx';
@@ -12,6 +12,9 @@ export default function App() {
     <Route path="/login" element={<Auth mode="login" />} /><Route path="/register" element={<Auth mode="register" />} />
     <Route path="/" element={<Navigate to={user ? (user.role === 'admin' ? '/admin' : '/student') : '/login'} replace />} />
     <Route path="/student" element={<S><StudentDashboard /></S>} />
+    <Route path="/student/exams" element={<S><StudentExams /></S>} />
+    <Route path="/student/results" element={<S><StudentResults /></S>} />
+    <Route path="/student/profile" element={<S><StudentProfile /></S>} />
     <Route path="/exam/:examId/start" element={<S layout={false}><ExamStart /></S>} />
     <Route path="/exam/attempt/:attemptId" element={<S layout={false}><ExamRoom /></S>} />
     <Route path="/result/:id" element={<S><Result /></S>} />

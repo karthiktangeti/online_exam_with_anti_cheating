@@ -15,7 +15,7 @@ export default function AdminQuestions() {
   const remove = async () => { try { await api.delete(`/questions/${del._id}`); setDel(null); load(); } catch (x) { toast(errMsg(x), 'error'); } };
   if (err) return <ErrorBox text={err} />; if (!qs) return <LoadingSpinner />;
   const total = qs.reduce((s, q) => s + q.marks, 0);
-  return <div className="space-y-4"><Link to="/admin/exams" className="text-sm text-indigo-600">← Exams</Link><h1 className="text-2xl font-bold">{exam.title} — Questions</h1>
+  return <div className="page-enter space-y-5"><Link to="/admin/exams" className="text-sm font-semibold text-blue-600 hover:text-blue-800">← Exams</Link><h1 className="text-2xl font-bold tracking-tight text-slate-900">{exam.title} — Questions</h1>
     <p className="text-sm text-slate-500">{qs.length} questions · marks from questions: {total} · exam total marks: {exam.totalMarks}{total !== exam.totalMarks && <span className="text-amber-600"> (mismatch — percentages use exam total)</span>}</p>
     <Card><form onSubmit={save} className="space-y-2"><h2 className="font-semibold">{form._id ? 'Edit question' : 'Add question'}</h2>
       <textarea className={inp} placeholder="Question text" value={form.question} onChange={e => setForm({ ...form, question: e.target.value })} required />
