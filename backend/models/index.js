@@ -1,4 +1,5 @@
-import mongoose from 'mongoose'; import { EVENT_TYPES } from '../utils/weights.js';
+import mongoose from 'mongoose'; 
+import { EVENT_TYPES } from '../utils/weights.js';
 const { Schema, model } = mongoose; const ref = (r, x = {}) => ({ type: Schema.Types.ObjectId, ref: r, required: true, ...x });
 export const User = model('User', new Schema({
   name: { type: String, required: true, trim: true }, email: { type: String, required: true, unique: true, lowercase: true, trim: true },
