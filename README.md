@@ -8,7 +8,7 @@ React + Vite + Tailwind | Node + Express + MongoDB + Socket.IO
    cd backend
    npm install
    ```
-   Edit `backend/.env`: set `MONGO_URI` (JWT_SECRET is already generated), optionally `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
+   Edit `backend/.env`: set `MONGO_URI` (JWT_SECRET is already generated), optionally `ADMIN_EMAIL` / `ADMIN_PASSWORD`. To enable AI question drafts in Admin → Questions, set `GROQ_API_KEY` (and optionally `GROQ_MODEL`) in the backend environment. Never put this key in the frontend `.env`. The assistant supports 1–20 questions per generation and adds reviewed drafts in one click.
    ```
    npm run seed:admin     # creates the first admin
    npm run dev            # http://localhost:5000

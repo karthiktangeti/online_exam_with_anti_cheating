@@ -29,8 +29,20 @@ router.post('/start', studentOnly, h(async (req, res) => {
 router.get('/mine', studentOnly, h(async (req, res) =>
   res.json(await Attempt.find({ studentId: req.user._id }).populate('examId', 'title totalMarks passingMarks').sort({ startTime: -1 }))));
 router.get('/', adminOnly, h(async (req, res) => {
+  const filter = {};
+  if (req.query.date !== undefined) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(req.query.date)) return res.status(400).json({ message: 'Invalid date' });
+    const [year, month, day] = req.query.date.split('-').map(Number);
+    const timezoneOffset = Number(req.query.tzOffset || 0);
+    if (!Number.isInteger(timezoneOffset) || timezoneOffset < -840 || timezoneOffset > 840) return res.status(400).json({ message: 'Invalid timezone' });
+    const start = new Date(Date.UTC(year, month - 1, day) + timezoneOffset * 60_000);
+    const end = new Date(start); end.setUTCDate(end.getUTCDate() + 1);
+    const calendarDate = new Date(Date.UTC(year, month - 1, day));
+    if (Number.isNaN(start.getTime()) || calendarDate.getUTCFullYear() !== year || calendarDate.getUTCMonth() !== month - 1 || calendarDate.getUTCDate() !== day) return res.status(400).json({ message: 'Invalid date' });
+    filter.startTime = { $gte: start, $lt: end };
+  }
   const [list, agg] = await Promise.all([
-    Attempt.find().populate('studentId', 'name email').populate('examId', 'title totalMarks').sort({ startTime: -1 }).limit(500).lean(),
+    Attempt.find(filter).populate('studentId', 'name email').populate('examId', 'title totalMarks').sort({ startTime: -1 }).limit(500).lean(),
     AntiCheatEvent.aggregate([{ $group: { _id: '$attemptId', score: { $sum: '$severity' }, warningCount: { $sum: { $cond: [{ $gt: ['$severity', 0] }, 1, 0] } } } }])]);
   const sm = new Map(agg.map(x => [String(x._id), x]));
   res.json(list.map(a => ({ ...a, warningCount: a.antiCheatWarningCount || sm.get(String(a._id))?.warningCount || 0, riskScore: sm.get(String(a._id))?.score || 0 })));
