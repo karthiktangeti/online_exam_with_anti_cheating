@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken'; import { User } from '../models/index.js';
+import jwt from 'jsonwebtoken'; 
+import { User } from '../models/index.js';
 export async function protect(req, res, next) {
   try {
     const h = req.headers.authorization || ''; const t = h.startsWith('Bearer ') ? h.slice(7) : null;
