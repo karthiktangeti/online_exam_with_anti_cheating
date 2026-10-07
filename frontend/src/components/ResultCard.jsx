@@ -1,4 +1,5 @@
-import { fmtDur, timeTaken } from '../utils/format.js'; import { Card } from './UI.jsx';
+import { fmtDur, timeTaken } from '../utils/format.js'; 
+import { Card } from './UI.jsx';
 import { CheckCircle2 } from 'lucide-react';
 export default function ResultCard({ attempt }) {
   const e = attempt.examId, pct = e.totalMarks ? Math.round((attempt.score / e.totalMarks) * 100) : 0, passed = attempt.score >= e.passingMarks;
