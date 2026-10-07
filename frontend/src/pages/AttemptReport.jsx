@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react'; import { Link, useParams } from 'react-router-dom'; import api, { errMsg } from '../services/api.js';
-import { Card, LoadingSpinner, ErrorBox, RiskBadge } from '../components/UI.jsx'; import IncidentTimeline from '../components/IncidentTimeline.jsx'; import { fmtDur, timeTaken, label } from '../utils/format.js';
+import { useEffect, useState } from 'react'; 
+import { Link, useParams } from 'react-router-dom';
+import api, { errMsg } from '../services/api.js';
+import { Card, LoadingSpinner, ErrorBox, RiskBadge } from '../components/UI.jsx'; 
+import IncidentTimeline from '../components/IncidentTimeline.jsx';
+import { fmtDur, timeTaken, label } from '../utils/format.js';
 const TYPES = ['TAB_SWITCH', 'FULLSCREEN_EXIT', 'COPY_ATTEMPT', 'PASTE_ATTEMPT', 'CUT_ATTEMPT', 'RIGHT_CLICK', 'KEYBOARD_SHORTCUT', 'MULTIPLE_SESSION', 'NO_FACE_DETECTED', 'MULTIPLE_FACES_DETECTED', 'HEAD_TURN_LEFT', 'HEAD_TURN_RIGHT', 'LOOKING_DOWN', 'NO_FACE', 'MULTIPLE_FACES', 'LOOKING_AWAY', 'PHONE_DETECTED', 'CAMERA_DISABLED'];
 export default function AttemptReport() {
-  const { id } = useParams(); const [d, setD] = useState(null); const [err, setErr] = useState('');
+  const { id } = useParams(); const [d, setD] = useState(null); 
+  const [err, setErr] = useState('');
   useEffect(() => {
     let alive = true;
     const load = () => api.get(`/anti-cheat/attempt/${id}`).then(r => alive && setD(r.data)).catch(e => alive && setErr(errMsg(e)));
