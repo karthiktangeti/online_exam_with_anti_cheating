@@ -1,10 +1,19 @@
-import { useEffect, useState } from 'react'; import { useNavigate } from 'react-router-dom'; import { BookOpen, CheckCircle2, Clock3, Sparkles, Trophy, ArrowRight } from 'lucide-react';
-import api, { errMsg } from '../services/api.js'; import { useAuth } from '../context/AuthContext.jsx'; import ExamCard from '../components/ExamCard.jsx';
+import { useEffect, useState } from 'react'; 
+import { useNavigate } from 'react-router-dom'; 
+import { BookOpen, CheckCircle2, Clock3, Sparkles, Trophy, ArrowRight } from 'lucide-react';
+import api, { errMsg } from '../services/api.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import ExamCard from '../components/ExamCard.jsx';
 import { LoadingSpinner, ErrorBox, Card } from '../components/UI.jsx';
 export default function StudentDashboard() {
-  const { user } = useAuth(); const nav = useNavigate(); const [exams, setExams] = useState(null); const [attempts, setAttempts] = useState([]); const [err, setErr] = useState('');
+  const { user } = useAuth(); 
+  const nav = useNavigate(); 
+  const [exams, setExams] = useState(null);
+  const [attempts, setAttempts] = useState([]); 
+  const [err, setErr] = useState('');
   useEffect(() => { Promise.all([api.get('/exams'), api.get('/attempts/mine')]).then(([e, a]) => { setExams(e.data); setAttempts(a.data); }).catch(e => setErr(errMsg(e))); }, []);
-  if (err) return <ErrorBox text={err} />; if (!exams) return <LoadingSpinner />;
+  if (err) return <ErrorBox text={err} />; 
+  if (!exams) return <LoadingSpinner />;
   const done = attempts.filter(a => a.status !== 'in_progress');
   const completedCount = done.length;
   return <div className="page-enter space-y-8">
