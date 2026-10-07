@@ -1,11 +1,16 @@
-import { Router } from 'express'; import { Attempt, AntiCheatEvent } from '../models/index.js';
-import { protect, adminOnly, studentOnly } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
-import { logEvent, MAX_WARNINGS } from '../services/events.js'; import { CLIENT_EVENTS, riskLevel } from '../utils/weights.js'; import { finalizeAttempt } from '../services/grading.js';
+import { Router } from 'express'; 
+import { Attempt, AntiCheatEvent } from '../models/index.js';
+import { protect, adminOnly, studentOnly } from '../middleware/auth.js'; 
+import h from '../utils/asyncHandler.js';
+import { logEvent, MAX_WARNINGS } from '../services/events.js'; 
+import { CLIENT_EVENTS, riskLevel } from '../utils/weights.js'; 
+import { finalizeAttempt } from '../services/grading.js';
 const router = Router(); router.use(protect);
 router.post('/event', studentOnly, h(async (req, res) => {
   const { attemptId, eventType, metadata } = req.body;
   if (!CLIENT_EVENTS.includes(eventType)) return res.status(400).json({ message: 'Invalid event type' });
-  const a = await Attempt.findOne({ _id: attemptId, studentId: req.user._id, status: 'in_progress' }); if (!a) return res.status(404).json({ message: 'No active attempt' });
+  const a = await Attempt.findOne({ _id: attemptId, studentId: req.user._id, status: 'in_progress' }); 
+  if (!a) return res.status(404).json({ message: 'No active attempt' });
   const safeMeta = metadata && typeof metadata === 'object' && JSON.stringify(metadata).length < 1000 ? metadata : {};
   const result = await logEvent({ attemptId, studentId: a.studentId, examId: a.examId, eventType, metadata: safeMeta });
   if (result.autoSubmitted) await finalizeAttempt(a, 'auto_submitted');
