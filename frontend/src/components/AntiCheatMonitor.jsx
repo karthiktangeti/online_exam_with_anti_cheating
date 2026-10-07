@@ -1,4 +1,7 @@
-import { useEffect, useRef } from 'react'; import { io } from 'socket.io-client'; import { API_URL } from '../services/api.js'; import { useToast } from './Toast.jsx';
+import { useEffect, useRef } from 'react'; 
+import { io } from 'socket.io-client'; 
+import { API_URL } from '../services/api.js'; 
+import { useToast } from './Toast.jsx';
 // Attaches browser listeners + socket session/heartbeat. Signals are monitoring aids, not proof of cheating.
 export default function AntiCheatMonitor({ attemptId, report, active }) {
   const toast = useToast(); const act = useRef(active); act.current = active;
