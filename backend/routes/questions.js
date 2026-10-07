@@ -1,5 +1,7 @@
-import { Router } from 'express'; import { Question, Attempt, Exam } from '../models/index.js';
-import { protect, adminOnly } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
+import { Router } from 'express'; 
+import { Question, Attempt, Exam } from '../models/index.js';
+import { protect, adminOnly } from '../middleware/auth.js'; 
+import h from '../utils/asyncHandler.js';
 const router = Router(); router.use(protect);
 const F = ['examId', 'question', 'options', 'correctAnswer', 'marks'];
 const pick = b => Object.fromEntries(F.filter(k => b[k] !== undefined).map(k => [k, b[k]]));
