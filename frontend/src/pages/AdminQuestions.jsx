@@ -1,9 +1,24 @@
-import { useEffect, useState } from 'react'; import { Link, useParams } from 'react-router-dom';
-import api, { errMsg } from '../services/api.js'; import { useToast } from '../components/Toast.jsx'; import Modal from '../components/Modal.jsx'; import { btn, btn2, inp, Card, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx';
+import { useEffect, useState } from 'react'; 
+import { Link, useParams } from 'react-router-dom';
+import api, { errMsg } from '../services/api.js'; 
+import { useToast } from '../components/Toast.jsx'; 
+import Modal from '../components/Modal.jsx'; 
+import { btn, btn2, inp, Card, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx';
 export default function AdminQuestions() {
-  const { examId } = useParams(); const toast = useToast(); const blank = { question: '', options: ['', '', '', ''], correctAnswer: 0, marks: 1 };
-  const [exam, setExam] = useState(null); const [qs, setQs] = useState(null); const [form, setForm] = useState(blank); const [del, setDel] = useState(null); const [err, setErr] = useState('');
-  const [topic, setTopic] = useState(''); const [count, setCount] = useState(5); const [difficulty, setDifficulty] = useState('medium'); const [drafts, setDrafts] = useState([]); const [generating, setGenerating] = useState(false); const [adding, setAdding] = useState(false);
+  const { examId } = useParams(); 
+  const toast = useToast();
+  const blank = { question: '', options: ['', '', '', ''], correctAnswer: 0, marks: 1 };
+  const [exam, setExam] = useState(null); 
+  const [qs, setQs] = useState(null); 
+  const [form, setForm] = useState(blank);
+  const [del, setDel] = useState(null); 
+  const [err, setErr] = useState('');
+  const [topic, setTopic] = useState('');
+  const [count, setCount] = useState(5); 
+  const [difficulty, setDifficulty] = useState('medium'); 
+  const [drafts, setDrafts] = useState([]); 
+  const [generating, setGenerating] = useState(false);
+  const [adding, setAdding] = useState(false);
   const load = () => Promise.all([api.get(`/exams/${examId}`), api.get(`/questions/exam/${examId}`)]).then(([a, b]) => { setExam(a.data); setQs(b.data); }).catch(e => setErr(errMsg(e)));
   useEffect(() => { load(); }, [examId]);
   const save = async e => {
