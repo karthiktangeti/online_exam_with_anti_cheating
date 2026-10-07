@@ -1,8 +1,15 @@
-import { useState } from 'react'; import { Link, Navigate, useNavigate } from 'react-router-dom'; import { GraduationCap, ShieldCheck } from 'lucide-react';
-import { useAuth } from '../context/AuthContext.jsx'; import { errMsg } from '../services/api.js'; import { btn, inp, ErrorBox } from '../components/UI.jsx';
+import { useState } from 'react'; 
+import { Link, Navigate, useNavigate } from 'react-router-dom'; 
+import { GraduationCap, ShieldCheck } from 'lucide-react';
+import { useAuth } from '../context/AuthContext.jsx'; 
+import { errMsg } from '../services/api.js'; 
+import { btn, inp, ErrorBox } from '../components/UI.jsx';
 export default function Auth({ mode }) {
-  const reg = mode === 'register'; const { user, login, register } = useAuth(); const nav = useNavigate();
-  const [f, setF] = useState({ name: '', email: '', password: '' }); const [err, setErr] = useState(''); const [busy, setBusy] = useState(false);
+  const reg = mode === 'register';
+  const { user, login, register } = useAuth(); 
+  const nav = useNavigate();
+  const [f, setF] = useState({ name: '', email: '', password: '' }); 
+  const [err, setErr] = useState(''); const [busy, setBusy] = useState(false);
   if (user) return <Navigate to={user.role === 'admin' ? '/admin' : '/student'} replace />;
   const submit = async e => {
     e.preventDefault(); setBusy(true); setErr('');
