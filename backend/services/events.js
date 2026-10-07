@@ -1,4 +1,5 @@
-import { AntiCheatEvent, Attempt, User, Exam } from '../models/index.js'; import { WEIGHTS } from '../utils/weights.js';
+import { AntiCheatEvent, Attempt, User, Exam } from '../models/index.js'; 
+import { WEIGHTS } from '../utils/weights.js';
 import { emitToAdmins } from './io.js';
 export const MAX_WARNINGS = 10;
 export async function logEvent({ attemptId, studentId, examId, eventType, metadata = {} }) {
