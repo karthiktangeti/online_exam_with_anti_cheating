@@ -1,6 +1,7 @@
-import { Attempt, Answer, Question } from '../models/index.js'; import { logEvent } from './events.js';
+import { Attempt, Answer, Question } from '../models/index.js'; 
+import { logEvent } from './events.js';
 import { emitToAdmins } from './io.js';
-// Atomic claim prevents double grading; the server alone computes the score.
+
 export async function finalizeAttempt(attempt, status = 'submitted') {
   const claimed = await Attempt.findOneAndUpdate({ _id: attempt._id, status: 'in_progress' }, { status }, { new: true });
   if (!claimed) return Attempt.findById(attempt._id);
@@ -13,7 +14,8 @@ export async function finalizeAttempt(attempt, status = 'submitted') {
     const ok = a.selectedAnswer === q.correctAnswer; a.isCorrect = ok; a.marksObtained = ok ? q.marks : 0; await a.save();
     if (ok) { correct++; score += q.marks; } else wrong++;
   }
-  Object.assign(claimed, { score, correct, wrong, unanswered, submittedAt: new Date() }); await claimed.save();
+  Object.assign(claimed, { score, correct, wrong, unanswered, submittedAt: new Date() }); 
+  await claimed.save();
   await logEvent({ attemptId: claimed._id, studentId: claimed.studentId, examId: claimed.examId, eventType: 'EXAM_SUBMITTED', metadata: { status } });
   emitToAdmins('live:session', { attemptId: String(claimed._id), studentId: String(claimed.studentId), examId: String(claimed.examId), status: 'finalized', finished: true, timestamp: new Date().toISOString() });
   return claimed;
