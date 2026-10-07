@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react'; import { Camera, CameraOff } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react'; 
+import { Camera, CameraOff } from 'lucide-react';
 import { FilesetResolver, FaceLandmarker, ObjectDetector } from '@mediapipe/tasks-vision';
 const WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm';
 const FACE = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
 const OBJ = 'https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite';
-// All analysis runs locally in the browser. No video is recorded or uploaded; only event types are sent.
-// Thresholds (tune here): YAW 0.35/0.65, PITCH 0.62, "need" = consecutive checks (~0.7s each) before an event fires.
+
 export default function WebcamMonitor({ report, active = true }) {
   const v = useRef(); const [state, setState] = useState('starting'); const [ai, setAi] = useState(null);
   useEffect(() => {
