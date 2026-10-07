@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react'; import api, { errMsg } from '../services/api.js'; import { Card, Table, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx'; import { fmtDate } from '../utils/format.js';
+import { useEffect, useState } from 'react'; 
+import api, { errMsg } from '../services/api.js'; 
+import { Card, Table, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx'; 
+import { fmtDate } from '../utils/format.js';
 export default function AdminStudents() {
   const [s, setS] = useState(null); const [err, setErr] = useState('');
   useEffect(() => { api.get('/admin/students').then(r => setS(r.data)).catch(e => setErr(errMsg(e))); }, []);
