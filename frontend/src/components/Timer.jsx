@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react'; import { Clock } from 'lucide-react'; import { fmtDur } from '../utils/format.js';
-// endTime (ms) is issued by the server; offset = serverTime - clientTime corrects clock skew.
+import { useEffect, useRef, useState } from 'react'; 
+import { Clock } from 'lucide-react'; 
+import { fmtDur } from '../utils/format.js';
+
 export default function Timer({ endTime, offset, onExpire }) {
   const calc = () => Math.max(0, Math.floor((endTime - (Date.now() + offset)) / 1000));
   const [s, setS] = useState(calc); const fired = useRef(false);
