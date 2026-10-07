@@ -1,9 +1,15 @@
-import { useEffect, useState } from 'react'; import { Link } from 'react-router-dom'; import { Plus } from 'lucide-react';
-import api, { errMsg } from '../services/api.js'; import Modal from '../components/Modal.jsx'; import { useToast } from '../components/Toast.jsx';
-import { btn, inp, Card, Table, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx'; import { fmtDate, toLocalInput } from '../utils/format.js';
+import { useEffect, useState } from 'react'; 
+import { Link } from 'react-router-dom'; 
+import { Plus } from 'lucide-react';
+import api, { errMsg } from '../services/api.js'; 
+import Modal from '../components/Modal.jsx'; 
+import { useToast } from '../components/Toast.jsx';
+import { btn, inp, Card, Table, LoadingSpinner, Empty, ErrorBox } from '../components/UI.jsx'; 
+import { fmtDate, toLocalInput } from '../utils/format.js';
 const blank = { title: '', description: '', duration: 30, totalMarks: 10, passingMarks: 4, startDate: '', endDate: '' };
 export default function AdminExams() {
-  const toast = useToast(); const [exams, setExams] = useState(null); const [err, setErr] = useState(''); const [form, setForm] = useState(null); const [del, setDel] = useState(null);
+  const toast = useToast(); const [exams, setExams] = useState(null); const [err, setErr] = useState(''); 
+  const [form, setForm] = useState(null); const [del, setDel] = useState(null);
   const load = () => api.get('/exams').then(r => setExams(r.data)).catch(e => setErr(errMsg(e))); useEffect(() => { load(); }, []);
   const save = async e => {
     e.preventDefault(); const body = { ...form, startDate: new Date(form.startDate).toISOString(), endDate: new Date(form.endDate).toISOString() };
