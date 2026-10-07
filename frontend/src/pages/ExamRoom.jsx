@@ -1,39 +1,67 @@
-import { useCallback, useEffect, useRef, useState } from 'react'; import { useNavigate, useParams } from 'react-router-dom';
-import api, { errMsg } from '../services/api.js'; import Timer from '../components/Timer.jsx'; import AntiCheatMonitor from '../components/AntiCheatMonitor.jsx'; import WebcamMonitor from '../components/WebcamMonitor.jsx';
-import QuestionNavigator from '../components/QuestionNavigator.jsx'; import Modal from '../components/Modal.jsx'; import { btn, btn2, Card, LoadingSpinner, ErrorBox, ProgressBar } from '../components/UI.jsx';
-import { useToast } from '../components/Toast.jsx'; import { label } from '../utils/format.js';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import api, { errMsg } from '../services/api.js'; 
+import Timer from '../components/Timer.jsx';
+import AntiCheatMonitor from '../components/AntiCheatMonitor.jsx';
+import WebcamMonitor from '../components/WebcamMonitor.jsx';
+import QuestionNavigator from '../components/QuestionNavigator.jsx';
+import Modal from '../components/Modal.jsx';
+import { btn, btn2, Card, LoadingSpinner, ErrorBox, ProgressBar } from '../components/UI.jsx';
+import { useToast } from '../components/Toast.jsx'; 
+import { label } from '../utils/format.js';
 export default function ExamRoom() {
-  const { attemptId } = useParams(); const nav = useNavigate(); const toast = useToast();
-  const [d, setD] = useState(null); const [err, setErr] = useState(''); const [i, setI] = useState(0); const [answers, setAnswers] = useState({}); const [marked, setMarked] = useState([]);
-  const [confirm, setConfirm] = useState(false); const [fs, setFs] = useState(!!document.fullscreenElement); const [done, setDone] = useState(false); const last = useRef({}); const sub = useRef(false);
+  const { attemptId } = useParams(); 
+  const nav = useNavigate(); 
+  const toast = useToast();
+  const [d, setD] = useState(null);
+  const [err, setErr] = useState(''); 
+  const [i, setI] = useState(0); 
+  const [answers, setAnswers] = useState({}); 
+  const [marked, setMarked] = useState([]);
+  const [confirm, setConfirm] = useState(false); 
+  const [fs, setFs] = useState(!!document.fullscreenElement); 
+  const [done, setDone] = useState(false); 
+  const last = useRef({}); 
+  const sub = useRef(false);
   useEffect(() => {
     api.get(`/attempts/${attemptId}/session`).then(r => {
       if (r.data.finished) return nav(`/result/${attemptId}`, { replace: true });
-      setD({ ...r.data, offset: r.data.serverTime - Date.now(), warningCount: r.data.warningCount || 0, warningEvents: r.data.warningEvents || [] }); setAnswers(r.data.answers); setMarked(r.data.marked);
+      setD({ ...r.data, offset: r.data.serverTime - Date.now(), warningCount: r.data.warningCount || 0, warningEvents: r.data.warningEvents || [] }); 
+      setAnswers(r.data.answers); setMarked(r.data.marked);
     }).catch(e => setErr(errMsg(e)));
-    const f = () => setFs(!!document.fullscreenElement); document.addEventListener('fullscreenchange', f); return () => document.removeEventListener('fullscreenchange', f);
+    const f = () => setFs(!!document.fullscreenElement); document.addEventListener('fullscreenchange', f);
+    return () => document.removeEventListener('fullscreenchange', f);
   }, [attemptId]);
   const report = useCallback((type, metadata = {}) => {
-    const n = Date.now(); if (n - (last.current[type] || 0) < 1500) return; last.current[type] = n;
+    const n = Date.now(); 
+    if (n - (last.current[type] || 0) < 1500) return; 
+    last.current[type] = n;
     api.post('/anti-cheat/event', { attemptId, eventType: type, metadata }).then(({ data }) => {
       setD(current => current ? { ...current, warningCount: data.warningCount, warningEvents: [...(current.warningEvents || []), data.event] } : current);
       toast(`Warning ${data.warningCount}/10: ${label(type)}`, 'warn');
-      if (data.autoSubmitted) { toast('Your exam was automatically submitted after reaching the monitoring warning limit.', 'error'); setDone(true); nav(`/result/${attemptId}`, { replace: true }); }
+      if (data.autoSubmitted) { toast('Your exam was automatically submitted after reaching the monitoring warning limit.', 'error');
+                               setDone(true); nav(`/result/${attemptId}`, { replace: true }); }
     }).catch(() => {});
   }, [attemptId, toast]);
   const markedRef = useRef(marked); markedRef.current = marked;
-  useEffect(() => { const t = setInterval(() => api.put(`/attempts/${attemptId}/marked`, { marked: markedRef.current }).catch(() => {}), 30000); return () => clearInterval(t); }, [attemptId]); // periodic state sync
+  useEffect(() => { const t = setInterval(() => api.put(`/attempts/${attemptId}/marked`, { marked: markedRef.current }).catch(() => {}), 30000);
+                   return () => clearInterval(t); }, [attemptId]); // periodic state sync
   const submit = async () => {
     if (sub.current) return; sub.current = true; setDone(true); setConfirm(false);
-    try { await api.post('/attempts/submit', { attemptId }); document.fullscreenElement && document.exitFullscreen().catch(() => {}); nav(`/result/${attemptId}`, { replace: true }); }
+    try { await api.post('/attempts/submit', { attemptId }); document.fullscreenElement && document.exitFullscreen().catch(() => {});
+         nav(`/result/${attemptId}`, { replace: true }); }
     catch (e) { sub.current = false; setDone(false); toast(errMsg(e), 'error'); }
   };
   const choose = async (qid, val) => {
     const prev = answers[qid]; setAnswers(a => ({ ...a, [qid]: val }));
-    try { await api.post('/answers', { attemptId, questionId: qid, selectedAnswer: val }); } catch (e) { setAnswers(a => ({ ...a, [qid]: prev })); toast('Could not save answer: ' + errMsg(e), 'error'); }
+    try { await api.post('/answers', { attemptId, questionId: qid, selectedAnswer: val }); 
+        } 
+    catch (e) { setAnswers(a => ({ ...a, [qid]: prev })); 
+               toast('Could not save answer: ' + errMsg(e), 'error'); }
   };
   const toggleMark = qid => { const m = marked.includes(qid) ? marked.filter(x => x !== qid) : [...marked, qid]; setMarked(m); api.put(`/attempts/${attemptId}/marked`, { marked: m }).catch(() => {}); };
-  if (err) return <div className="p-6"><ErrorBox text={err} /></div>; if (!d) return <LoadingSpinner />;
+  if (err) return <div className="p-6"><ErrorBox text={err} /></div>;
+  if (!d) return <LoadingSpinner />;
   const q = d.questions[i], answered = Object.values(answers).filter(v => v != null).length;
   return <div className="min-h-screen select-none bg-slate-50">
     <AntiCheatMonitor attemptId={attemptId} report={report} active={!done} /><WebcamMonitor report={report} active={!done} />
