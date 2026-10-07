@@ -1,15 +1,20 @@
-import { Router } from 'express'; import { Exam, Question, Attempt, Answer, AntiCheatEvent } from '../models/index.js';
-import { protect, adminOnly, studentOnly } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
-import { finalizeAttempt, isExpired } from '../services/grading.js'; import { logEvent } from '../services/events.js';
+import { Router } from 'express';
+import { Exam, Question, Attempt, Answer, AntiCheatEvent } from '../models/index.js';
+import { protect, adminOnly, studentOnly } from '../middleware/auth.js'; 
+import h from '../utils/asyncHandler.js';
+import { finalizeAttempt, isExpired } from '../services/grading.js'; 
+import { logEvent } from '../services/events.js';
 import { emitToAdmins } from '../services/io.js';
 const router = Router(); router.use(protect);
 const own = async (req, res) => {
   const a = await Attempt.findOne({ _id: req.params.id || req.body.attemptId, studentId: req.user._id });
-  if (!a) { res.status(404).json({ message: 'Attempt not found' }); return null; }
+  if (!a) { res.status(404).json({ message: 'Attempt not found' }); 
+           return null; }
   return isExpired(a) ? finalizeAttempt(a, 'auto_submitted') : a;
 };
 router.post('/start', studentOnly, h(async (req, res) => {
-  const { examId } = req.body; const exam = await Exam.findById(examId); if (!exam) return res.status(404).json({ message: 'Exam not found' });
+  const { examId } = req.body; const exam = await Exam.findById(examId); 
+  if (!exam) return res.status(404).json({ message: 'Exam not found' });
   let a = await Attempt.findOne({ studentId: req.user._id, examId });
   if (a) {
     if (isExpired(a)) a = await finalizeAttempt(a, 'auto_submitted');
