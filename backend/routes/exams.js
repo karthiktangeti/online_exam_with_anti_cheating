@@ -1,12 +1,15 @@
-import { Router } from 'express'; import { Exam, Question, Attempt } from '../models/index.js';
-import { protect, adminOnly } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
+import { Router } from 'express'; 
+import { Exam, Question, Attempt } from '../models/index.js';
+import { protect, adminOnly } from '../middleware/auth.js';
+import h from '../utils/asyncHandler.js';
 const router = Router(); router.use(protect);
 const F = ['title', 'description', 'duration', 'totalMarks', 'passingMarks', 'startDate', 'endDate'];
 const pick = b => Object.fromEntries(F.filter(k => b[k] !== undefined).map(k => [k, b[k]]));
 const badDates = b => b.startDate && b.endDate && new Date(b.endDate) <= new Date(b.startDate);
 router.get('/', h(async (req, res) => {
   const exams = await Exam.find().sort({ startDate: -1 }).lean();
-  const counts = await Question.aggregate([{ $group: { _id: '$examId', n: { $sum: 1 } } }]); const cm = new Map(counts.map(c => [String(c._id), c.n]));
+  const counts = await Question.aggregate([{ $group: { _id: '$examId', n: { $sum: 1 } } }]); 
+  const cm = new Map(counts.map(c => [String(c._id), c.n]));
   let am = new Map();
   if (req.user.role === 'student') am = new Map((await Attempt.find({ studentId: req.user._id }).select('examId status score')).map(a => [String(a.examId), a]));
   res.json(exams.map(e => ({ ...e, questionCount: cm.get(String(e._id)) || 0, attempt: am.get(String(e._id)) || null })));
