@@ -1,4 +1,5 @@
-import { Clock, HelpCircle, Award, ArrowRight } from 'lucide-react'; import { Card, btn } from './UI.jsx'; import { fmtDate } from '../utils/format.js';
+import { Clock, HelpCircle, Award, ArrowRight } from 'lucide-react'; 
+import { Card, btn } from './UI.jsx'; import { fmtDate } from '../utils/format.js';
 const visuals = ['from-[#dce8f4] to-[#f5f8fb]', 'from-[#e4e3ec] to-[#f7f6fa]', 'from-[#f4e5d9] to-[#fbf8f5]'];
 export default function ExamCard({ exam, status, index = 0, onStart }) {
   const colors = { Available: 'bg-emerald-100 text-emerald-700', Upcoming: 'bg-blue-100 text-blue-700', 'In progress': 'bg-amber-100 text-amber-700', Closed: 'bg-slate-200 text-slate-600' };
