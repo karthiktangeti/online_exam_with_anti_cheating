@@ -1,5 +1,9 @@
-import { Router } from 'express'; import bcrypt from 'bcryptjs'; import jwt from 'jsonwebtoken';
-import { User } from '../models/index.js'; import { protect } from '../middleware/auth.js'; import h from '../utils/asyncHandler.js';
+import { Router } from 'express'; 
+import bcrypt from 'bcryptjs'; 
+import jwt from 'jsonwebtoken';
+import { User } from '../models/index.js'; 
+import { protect } from '../middleware/auth.js'; 
+import h from '../utils/asyncHandler.js';
 const router = Router(); const s = v => typeof v === 'string';
 const sign = u => jwt.sign({ id: u._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 const pub = u => ({ id: u._id, name: u.name, email: u.email, role: u.role, profilePicture: u.profilePicture || '' });
