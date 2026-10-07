@@ -1,4 +1,6 @@
-import { Navigate } from 'react-router-dom'; import { useAuth } from '../context/AuthContext.jsx'; import { LoadingSpinner } from './UI.jsx';
+import { Navigate } from 'react-router-dom'; 
+import { useAuth } from '../context/AuthContext.jsx'; 
+import { LoadingSpinner } from './UI.jsx';
 export default function ProtectedRoute({ role, children }) { // role: 'student' | 'admin' (AdminRoute = role="admin")
   const { user, loading } = useAuth();
   if (loading) return <LoadingSpinner />;
