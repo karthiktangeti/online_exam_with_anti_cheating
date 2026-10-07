@@ -1,5 +1,9 @@
-import { useEffect, useState } from 'react'; import { Link } from 'react-router-dom'; import { Users, FileText, ClipboardList, Percent, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
-import api, { errMsg } from '../services/api.js'; import { Card, Stat, Table, LoadingSpinner, ErrorBox, Empty } from '../components/UI.jsx'; import { fmtDate, label } from '../utils/format.js';
+import { useEffect, useState } from 'react'; 
+import { Link } from 'react-router-dom'; 
+import { Users, FileText, ClipboardList, Percent, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
+import api, { errMsg } from '../services/api.js'; 
+import { Card, Stat, Table, LoadingSpinner, ErrorBox, Empty } from '../components/UI.jsx'; 
+import { fmtDate, label } from '../utils/format.js';
 export default function AdminDashboard() {
   const [s, setS] = useState(null); const [inc, setInc] = useState([]); const [err, setErr] = useState('');
   useEffect(() => { Promise.all([api.get('/admin/stats'), api.get('/anti-cheat/recent')]).then(([a, b]) => { setS(a.data); setInc(b.data); }).catch(e => setErr(errMsg(e))); }, []);
